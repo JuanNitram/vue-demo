@@ -1,15 +1,20 @@
 <template>
   <div id="app">
-    <template v-if="items.length > 0">
-      <UsersList :items="items"/>
-    </template>
-    <template v-else>
-      <div class="md-title">There's no elements available.</div>
+    <md-progress-spinner v-if="isLoading" md-mode="indeterminate"></md-progress-spinner>
+
+    <template v-if="!isLoading">
+      <template v-if="items.length > 0">
+        <UsersList :items="items"/>
+      </template>
+      <template v-else>
+        <div class="md-title">There's no elements available.</div>
+      </template>
     </template>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import UsersList from '@/components/Users/List';
 
 export default {
@@ -20,25 +25,24 @@ export default {
   },
 
   data: () => ({
-    items: [
-      {
-          name: 'Leanne Graham',
-          email: 'Sincere@april.biz',
-          website: 'hildegard.org',
-          company: {
-            name: 'Romaguera-Crona'
-          }
-      },
-      {
-        name: 'Ervin Howell',
-        email: 'Shanna@melissa.tv',
-        website: 'anastasia.net',
-        company: {
-          name: 'Deckow-Crist'
-        }
-      }
-    ]
-  })
+    items: [],
+    isLoading: false
+  }),
+
+  created: async function() {
+    try {
+      this.isLoading = true;
+
+      const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
+      this.items = data;
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000)
+    }
+  }
 }
 </script>
 
