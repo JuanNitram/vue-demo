@@ -3,8 +3,8 @@
     <md-progress-spinner v-if="isLoading" md-mode="indeterminate"></md-progress-spinner>
 
     <template v-if="!isLoading">
-      <template v-if="items.length > 0">
-        <UsersList :items="items"/>
+      <template v-if="users.length > 0">
+        <UsersList :items="users"/>
       </template>
       <template v-else>
         <div class="md-title">There's no elements available.</div>
@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-import UsersList from '@/components/Users/List';
+import { mapActions, mapState } from 'vuex'
+import UsersList from '@/components/Users/List'
 
 export default {
   name: 'App',
@@ -25,23 +25,32 @@ export default {
   },
 
   data: () => ({
-    items: [],
     isLoading: false
   }),
 
   created: async function() {
     try {
-      this.isLoading = true;
-
-      const { data } = await axios.get('https://jsonplaceholder.typicode.com/users');
-      this.items = data;
+      this.isLoading = true
+      await this.getUsers()
     } catch (ex) {
-      console.log(ex);
+      console.log(ex)
     } finally {
       setTimeout(() => {
         this.isLoading = false;
-      }, 2000)
+      }, 3000)
     }
+  },
+
+  methods: {
+    ...mapActions({
+      getUsers: 'getUsers'
+    })
+  },
+
+  computed: {
+    ...mapState({
+      users: state => state.users
+    })
   }
 }
 </script>
