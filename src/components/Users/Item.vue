@@ -1,7 +1,13 @@
 <template>
     <md-card>
       <md-card-header>
-        <div class="md-title">{{ item.name }}</div>
+        <div class="container">
+          <div class="md-title">
+            {{ item.name }}
+          </div>
+          
+          <img :src="item.image" width="80" height="80"/> 
+        </div>
       </md-card-header>
 
       <md-card-content>
@@ -26,5 +32,9 @@ export default {
 <style>
     .md-card {
         margin: 1rem;
+    }
+
+    img {
+      border-radius: 100%;
     }
 </style>

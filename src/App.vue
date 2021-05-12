@@ -49,7 +49,17 @@ export default {
 
   computed: {
     ...mapState({
-      users: state => state.users
+      users: state => state.users.map(user => 
+        ({
+          name: user.name,
+          email: user.email,
+          website: user.website,
+          company: {
+            name: user.company.name
+          },
+          image: `https://picsum.photos/2${Math.floor((Math.random() * 10) + 1)}`
+        })
+      )
     })
   }
 }
